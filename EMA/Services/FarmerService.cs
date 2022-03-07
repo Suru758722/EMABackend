@@ -14,10 +14,10 @@ namespace EMA.Services
 {
     public interface IFarmerService 
     {
-        List<FarmerModel> GetData();
+        dynamic GetData(int take);
         bool AddUpdate(FarmerModel data);
         bool Delete(int Id);
-        FarmerDetail GetDataById(int Id);
+        List<FarmerDetail> GetDataById(int Id, int cropId);
         ExcelDownloadModel DownloadSurwayDataByFarmerId(int farmerId);
     }
     public class FarmerService : IFarmerService
@@ -30,11 +30,12 @@ namespace EMA.Services
             _config = config;
         }
        
-        public List<FarmerModel> GetData()
+        public dynamic GetData(int take)
         {
-            
+            bool moreExist = false;
             var farmerList = (from fd in _context.FarmerDetail
                               join u in _context.Users on fd.CreatedBy equals u.Id
+                              join c in _context.Crop on fd.CropId equals c.Id
                               select new FarmerModel
                               {
                                   Id = fd.Id,
@@ -43,10 +44,15 @@ namespace EMA.Services
                                   LandHolding = fd.LandHolding,
                                   Phone = fd.Phone,
                                   CreatedBy = u.UserName.Replace("_", " "),
-                                  CreatedDate = fd.CreatedDateUtc
-                              }).ToList();
-
-            return farmerList;
+                                  CreatedDate = fd.CreatedDateUtc,
+                                  CropName = c.CropName
+                              }).OrderByDescending(x => x.Id).AsQueryable();
+            int total = farmerList.Count() - (take - 1) * 2;
+            if (total >  2)
+                moreExist = true;
+            else
+                moreExist = false;
+            return new {take = take,exist= moreExist, list= farmerList.Skip((take - 1) * 2).Take(2).ToList() };
 
         }
        
@@ -61,6 +67,7 @@ namespace EMA.Services
                 farmerDetail.Phone = data.Phone;
                 farmerDetail.Address = data.Address;
                 farmerDetail.CreatedBy = data.CreatedBy;
+                farmerDetail.CropId = data.CropId;
                 _context.FarmerDetail.Add(farmerDetail);
                 _context.SaveChanges();
 
@@ -71,6 +78,7 @@ namespace EMA.Services
                 _doesExist.LandHolding = data.LandHolding;
                 _doesExist.Address = data.Address;
                 _doesExist.Phone = data.Phone;
+                _doesExist.CropId = data.CropId;
                 _context.SaveChanges();
             }
             return true;
@@ -84,9 +92,13 @@ namespace EMA.Services
             _context.SaveChanges();
             return true;
         }
-        public FarmerDetail GetDataById(int Id)
+        public List<FarmerDetail> GetDataById(int Id,int cropId)
         {
-            return _context.FarmerDetail.Where(x => x.Id == Id).FirstOrDefault();
+            if(cropId == 0)
+            return _context.FarmerDetail.Where(x => x.Id == Id).ToList();
+            else
+            return _context.FarmerDetail.Where(x => x.CropId == cropId).ToList();
+
         }
 
         public ExcelDownloadModel DownloadSurwayDataByFarmerId(int farmerId)

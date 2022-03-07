@@ -28,6 +28,6 @@ namespace EMA.Data
         public DbSet<Production> Production { get; set; }
         public DbSet<FarmerDetail> FarmerDetail { get; set; }
         public DbSet<SeedBeed> SeedBeed { get; set; }
-
+        public DbSet<Crop> Crop { get; set; }
     }
 }

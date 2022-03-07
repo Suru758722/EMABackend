@@ -14,6 +14,9 @@ namespace EMA.Models
         public double LandHolding { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
-
+        public int Take { get; set; }
+        public bool MoreExist { get; set; }
+        public string CropName { get; set; }
+        public int CropId { get; set; }
     }
 }

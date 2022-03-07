@@ -13,8 +13,8 @@ namespace EMA.Controller
     [ApiController]
     public class AdminController : ControllerBase
     {
-        private readonly AdminService _adminService;
-        public AdminController(AdminService adminService)
+        private readonly IAdminService _adminService;
+        public AdminController(IAdminService adminService)
         {
             _adminService = adminService;
         }
@@ -23,6 +23,13 @@ namespace EMA.Controller
         public IActionResult GetSurwayData()
         {
             return Ok("Data");
+        }
+
+        [HttpGet]
+        [Route("GetCrop")]
+        public IActionResult GetCrop()
+        {
+            return Ok(_adminService.GetCrop());
         }
     }
 }

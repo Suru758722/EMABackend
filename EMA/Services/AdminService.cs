@@ -1,4 +1,5 @@
 ﻿using EMA.Data;
+using EMA.EntityModels;
 using EMA.Models;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace EMA.Services
 {
     public interface IAdminService
     {
-        List<string> GetSurwayData();
+        List<Crop> GetCrop();
     }
     public class AdminService : IAdminService
     {
@@ -19,9 +20,9 @@ namespace EMA.Services
             _context = context;
         }
 
-        public List<string> GetSurwayData()
+        public List<Crop> GetCrop()
         {
-            throw new NotImplementedException();
+            return _context.Crop.ToList();
         }
     }
 }

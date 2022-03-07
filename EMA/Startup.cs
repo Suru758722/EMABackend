@@ -28,6 +28,7 @@ namespace EMA
         {
             services.AddRazorPages();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IAdminService, AdminService>();
             services.AddTransient<IFarmerService, FarmerService>();
             services.AddTransient<IMachineService, MachineService>();
             services.AddTransient<IEquipmentService, EquipmentService>();

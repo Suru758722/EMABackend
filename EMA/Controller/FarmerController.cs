@@ -23,11 +23,12 @@ namespace EMA.Controller
         }
         // GET: api/<FarmerController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(int take)
         {
             try
             {
-                return Ok(_farmerService.GetData());
+
+                return Ok(_farmerService.GetData(take));
             }catch(Exception ex)
             {
                return BadRequest(ex.Message);
@@ -37,11 +38,11 @@ namespace EMA.Controller
         // GET api/<FarmerController>/5
         [Route("GetFarmerById")]
         [HttpGet]
-        public IActionResult GetFarmerById(int Id)
+        public IActionResult GetFarmerById(int Id,int cropId)
         {
             try
             {
-                return Ok(_farmerService.GetDataById(Id));
+                return Ok(_farmerService.GetDataById(Id,cropId));
             }catch(Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -57,7 +58,7 @@ namespace EMA.Controller
             {
                bool result =  _farmerService.AddUpdate(formData);
                 if (result)
-                    return Ok(_farmerService.GetData());
+                    return Ok(_farmerService.GetData(1));
                 else
                     return BadRequest(result);
 
@@ -83,7 +84,7 @@ namespace EMA.Controller
             {
                 bool result = _farmerService.Delete(id);
                 if (result)
-                    return Ok(_farmerService.GetData());
+                    return Ok(_farmerService.GetData(1));
                 else
                     return BadRequest(result);
 
