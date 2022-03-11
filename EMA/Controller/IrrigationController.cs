@@ -22,11 +22,11 @@ namespace EMA.Controller
 
         // GET: api/<IrrigationController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(int take)
         {
             try
             {
-                return Ok(_irrigationService.GetData());
+                return Ok(_irrigationService.GetData(take));
             }
             catch (Exception ex)
             {
@@ -34,12 +34,7 @@ namespace EMA.Controller
             }
         }
 
-        // GET api/<IrrigationController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+     
 
         // POST api/<IrrigationController>
         [HttpPost]
@@ -49,7 +44,7 @@ namespace EMA.Controller
             {
                 bool result = _irrigationService.AddUpdate(formData);
                 if (result)
-                    return Ok(_irrigationService.GetData());
+                    return Ok(_irrigationService.GetData(1));
                 else
                     return BadRequest(result);
 
@@ -74,7 +69,7 @@ namespace EMA.Controller
             {
                 bool result = _irrigationService.Delete(id);
                 if (result)
-                    return Ok(_irrigationService.GetData());
+                    return Ok(_irrigationService.GetData(1));
                 else
                     return BadRequest(result);
 

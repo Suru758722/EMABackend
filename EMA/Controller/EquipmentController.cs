@@ -21,11 +21,11 @@ namespace EMA.Controller
         }
         // GET: api/<EquipmentController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(int take)
         {
             try
             {
-                return Ok(_equipmentService.GetData());
+                return Ok(_equipmentService.GetData(take));
             }
             catch (Exception ex)
             {
@@ -33,12 +33,7 @@ namespace EMA.Controller
             }
         }
 
-        // GET api/<EquipmentController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+       
 
         // POST api/<EquipmentController>
         [HttpPost]
@@ -48,7 +43,7 @@ namespace EMA.Controller
             {
                 bool result = _equipmentService.AddUpdate(formData);
                 if (result)
-                    return Ok(_equipmentService.GetData());
+                    return Ok(_equipmentService.GetData(1));
                 else
                     return BadRequest(result);
 
@@ -74,7 +69,7 @@ namespace EMA.Controller
             {
                 bool result = _equipmentService.Delete(id);
                 if (result)
-                    return Ok(_equipmentService.GetData());
+                    return Ok(_equipmentService.GetData(1));
                 else
                     return BadRequest(result);
 

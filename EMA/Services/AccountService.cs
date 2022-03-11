@@ -18,7 +18,7 @@ namespace EMA.Services
     {
         Task<string> Login(LoginModel data);
         Task<bool> Register(RegisterModel data);
-        dynamic GetAllUser();
+        dynamic GetAllUser(int take);
         bool ChangeUserStatus(string Id);
         ExcelDownloadModel DownloadSurway();
     }
@@ -37,11 +37,20 @@ namespace EMA.Services
             _config = config;
         }
 
-        public dynamic GetAllUser()
+        public dynamic GetAllUser(int take)
         {
+            bool moreExist = false;
+
             string roleId = _context.Roles.Where(x => x.Name == "admin").FirstOrDefault().Id;
             string adminId = _context.UserRoles.Where(x => x.RoleId == roleId).FirstOrDefault().UserId;
-            return _context.Users.Select(x => new { Id = x.Id, UserName = x.UserName.Replace("_", " "), Status = x.EmailConfirmed }).Where(x => x.Id != adminId).ToList();
+            var list = _context.Users.Select(x => new { Id = x.Id, UserName = x.UserName.Replace("_", " "), Status = x.EmailConfirmed }).Where(x => x.Id != adminId).AsQueryable();
+            int total = list.Count() - (take - 1) * 2;
+            if (total > 2)
+                moreExist = true;
+            else
+                moreExist = false;
+            return new { take = take, exist = moreExist, list = list.Skip((take - 1) * 2).Take(2).ToList() };
+
         }
 
         public bool ChangeUserStatus(string Id)

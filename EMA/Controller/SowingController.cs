@@ -21,11 +21,11 @@ namespace EMA.Controller
         }
         // GET: api/<SowingController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(int take)
         {
             try
             {
-                return Ok(_sowingService.GetData());
+                return Ok(_sowingService.GetData(take));
             }
             catch (Exception ex)
             {
@@ -33,12 +33,6 @@ namespace EMA.Controller
             }
         }
 
-        // GET api/<SowingController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
         // POST api/<SowingController>
         [HttpPost]
@@ -48,7 +42,7 @@ namespace EMA.Controller
             {
                 bool result = _sowingService.AddUpdate(formData);
                 if (result)
-                    return Ok(_sowingService.GetData());
+                    return Ok(_sowingService.GetData(1));
                 else
                     return BadRequest(result);
 
@@ -73,7 +67,7 @@ namespace EMA.Controller
             {
                 bool result = _sowingService.Delete(id);
                 if (result)
-                    return Ok(_sowingService.GetData());
+                    return Ok(_sowingService.GetData(1));
                 else
                     return BadRequest(result);
 

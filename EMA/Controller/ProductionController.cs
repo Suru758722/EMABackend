@@ -22,11 +22,11 @@ namespace EMA.Controller
 
         // GET: api/<ProductionController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(int take)
         {
             try
             {
-                return Ok(_productionService.GetData());
+                return Ok(_productionService.GetData(take));
             }
             catch (Exception ex)
             {
@@ -34,12 +34,7 @@ namespace EMA.Controller
             }
         }
 
-        // GET api/<ProductionController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+       
 
         // POST api/<ProductionController>
         [HttpPost]
@@ -49,7 +44,7 @@ namespace EMA.Controller
             {
                 bool result = _productionService.AddUpdate(formData);
                 if (result)
-                    return Ok(_productionService.GetData());
+                    return Ok(_productionService.GetData(1));
                 else
                     return BadRequest(result);
 
@@ -74,7 +69,7 @@ namespace EMA.Controller
             {
                 bool result = _productionService.Delete(id);
                 if (result)
-                    return Ok(_productionService.GetData());
+                    return Ok(_productionService.GetData(1));
                 else
                     return BadRequest(result);
 

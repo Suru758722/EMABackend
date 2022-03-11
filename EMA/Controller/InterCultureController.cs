@@ -21,11 +21,11 @@ namespace EMA.Controller
         }
         // GET: api/<InterCultureController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(int take)
         {
             try
             {
-                return Ok(_interCultureService.GetData());
+                return Ok(_interCultureService.GetData( take));
             }
             catch (Exception ex)
             {
@@ -33,12 +33,7 @@ namespace EMA.Controller
             }
         }
 
-        // GET api/<InterCultureController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+      
 
         // POST api/<InterCultureController>
         [HttpPost]
@@ -48,7 +43,7 @@ namespace EMA.Controller
             {
                 bool result = _interCultureService.AddUpdate(formData);
                 if (result)
-                    return Ok(_interCultureService.GetData());
+                    return Ok(_interCultureService.GetData(1));
                 else
                     return BadRequest(result);
 
@@ -73,7 +68,7 @@ namespace EMA.Controller
             {
                 bool result = _interCultureService.Delete(id);
                 if (result)
-                    return Ok(_interCultureService.GetData());
+                    return Ok(_interCultureService.GetData(1));
                 else
                     return BadRequest(result);
 

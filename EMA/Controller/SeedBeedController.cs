@@ -23,11 +23,11 @@ namespace EMA.Controller
 
         // GET: api/<SeedBeedController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(int take)
         {
             try
             {
-                return Ok(_seedBeedService.GetData());
+                return Ok(_seedBeedService.GetData(take));
             }
             catch (Exception ex)
             {
@@ -35,12 +35,7 @@ namespace EMA.Controller
             }
         }
 
-        // GET api/<SeedBeedController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        
 
         // POST api/<SeedBeedController>
         [HttpPost]
@@ -50,7 +45,7 @@ namespace EMA.Controller
             {
                 bool result = _seedBeedService.AddUpdate(formData);
                 if (result)
-                    return Ok(_seedBeedService.GetData());
+                    return Ok(_seedBeedService.GetData(1));
                 else
                     return BadRequest(result);
 
@@ -76,7 +71,7 @@ namespace EMA.Controller
             {
                 bool result = _seedBeedService.Delete(id);
                 if (result)
-                    return Ok(_seedBeedService.GetData());
+                    return Ok(_seedBeedService.GetData(1));
                 else
                     return BadRequest(result);
 

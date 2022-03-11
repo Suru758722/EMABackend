@@ -25,20 +25,20 @@ namespace EMA.Controller
 
         [HttpGet]
         [Route("GetAllUser")]
-        public IActionResult GetAllUser()
+        public IActionResult GetAllUser(int take)
         {
-            return Ok(_accountService.GetAllUser());
+            return Ok(_accountService.GetAllUser(take));
         }
 
         [HttpGet]
         [Route("ChangeUserStatus")]
-        public IActionResult ChangeUserStatus(string Id)
+        public IActionResult ChangeUserStatus(string Id,int take)
         {
             try
             {
                 if (_accountService.ChangeUserStatus(Id))
                 {
-                    return Ok(_accountService.GetAllUser());
+                    return Ok(_accountService.GetAllUser(take));
                 }
                 else
                 {

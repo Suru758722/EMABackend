@@ -11,7 +11,7 @@ namespace EMA.Services
 {
     public interface ISeedBeedService
     {
-        List<SeedBeed> GetData();
+        dynamic GetData(int take);
         bool AddUpdate(SeedBeedModel data);
         bool Delete(int Id);
     }
@@ -23,9 +23,17 @@ namespace EMA.Services
             _context = context;
         }
 
-        public List<SeedBeed> GetData()
+        public dynamic GetData(int take)
         {
-            return _context.SeedBeed.ToList();
+            var list =  _context.SeedBeed.Include(x => x.Machine).Include(x => x.Equipment).Include(x => x.FarmerDetail).ThenInclude(x => x.Crop).AsQueryable();
+            bool moreExist = false;
+            int total = list.Count() - (take - 1) * 2;
+            if (total > 2)
+                moreExist = true;
+            else
+                moreExist = false;
+            return new { take = take, exist = moreExist, list = list.Skip((take - 1) * 2).Take(2).ToList() };
+
         }
         public bool AddUpdate(SeedBeedModel data)
         {

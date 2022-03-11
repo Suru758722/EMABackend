@@ -22,11 +22,11 @@ namespace EMA.Controller
 
         // GET: api/<FertilizerController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(int take)
         {
             try
             {
-                return Ok(_fertilizerService.GetData());
+                return Ok(_fertilizerService.GetData(take));
             }
             catch (Exception ex)
             {
@@ -34,13 +34,7 @@ namespace EMA.Controller
             }
         }
 
-        // GET api/<FertilizerController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
+       
         // POST api/<FertilizerController>
         [HttpPost]
         public IActionResult Post([FromBody]FertilizerModel formData)
@@ -49,7 +43,7 @@ namespace EMA.Controller
             {
                 bool result = _fertilizerService.AddUpdate(formData);
                 if (result)
-                    return Ok(_fertilizerService.GetData());
+                    return Ok(_fertilizerService.GetData(1));
                 else
                     return BadRequest(result);
 
@@ -74,7 +68,7 @@ namespace EMA.Controller
             {
                 bool result = _fertilizerService.Delete(id);
                 if (result)
-                    return Ok(_fertilizerService.GetData());
+                    return Ok(_fertilizerService.GetData(1));
                 else
                     return BadRequest(result);
 

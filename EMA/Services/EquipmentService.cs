@@ -10,7 +10,7 @@ namespace EMA.Services
 {
     public interface IEquipmentService
     {
-        List<Equipment> GetData();
+        dynamic GetData(int take);
         bool AddUpdate(EquipmentModel data);
         bool Delete(int Id);
     }
@@ -22,9 +22,16 @@ namespace EMA.Services
             _context = context;
         }
 
-        public List<Equipment> GetData()
+        public dynamic GetData(int take)
         {
-            return _context.Equipment.ToList();
+            var list =  _context.Equipment.AsQueryable();
+            bool moreExist = false;
+            int total = list.Count() - (take - 1) * 2;
+            if (total > 2)
+                moreExist = true;
+            else
+                moreExist = false;
+            return new { take = take, exist = moreExist, list = list.Skip((take - 1) * 2).Take(2).ToList() };
 
         }
 

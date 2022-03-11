@@ -22,11 +22,11 @@ namespace EMA.Controller
 
         // GET: api/<MachineController>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult Get(int take)
         {
             try
             {
-                return Ok(_machineService.GetData());
+                return Ok(_machineService.GetData(take));
             }
             catch (Exception ex)
             {
@@ -34,13 +34,7 @@ namespace EMA.Controller
             }
         }
 
-        // GET api/<MachineController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
+        
         // POST api/<MachineController>
         [HttpPost]
         public IActionResult Post([FromBody]MachineModel formData)
@@ -49,7 +43,7 @@ namespace EMA.Controller
             {
                 bool result = _machineService.AddUpdate(formData);
                 if (result)
-                    return Ok(_machineService.GetData());
+                    return Ok(_machineService.GetData(1));
                 else
                     return BadRequest(result);
 
@@ -75,7 +69,7 @@ namespace EMA.Controller
             {
                 bool result = _machineService.Delete(id);
                 if (result)
-                    return Ok(_machineService.GetData());
+                    return Ok(_machineService.GetData(1));
                 else
                     return BadRequest(result);
 
